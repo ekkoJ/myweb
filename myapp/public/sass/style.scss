@@ -1,0 +1,637 @@
+@import "compass/css3";
+@import "compass/css3/animation";
+*{
+    margin: 0;
+    padding: 0;
+    font-size: 0;
+    // opacity: 0;
+}
+a,li,p,em,i{
+    list-style: none;
+    font-style: normal;
+    text-decoration: none;
+}
+
+body{
+    min-width:1000px;
+}
+.disnone{
+    display: none !important;
+}
+.wrapper{
+    width: 100%;;
+    position: relative;
+    overflow: hidden;
+    left: 0%;
+    // background: url('../image/kuke.jpg') 0 0 no-repeat;
+    // background-size: cover;
+}
+.quesBox{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;;
+    left: 0;
+    text-align: center;
+    // .questionBox{
+    //     position: relative;
+    // }
+    &:after{
+        display: inline-block;
+        height: 100%;
+        content: "";
+        vertical-align: middle;
+    }
+    // background: #f00;
+    h1{
+        font-size: 20px;
+        margin-bottom: 100px;
+    }
+    .trashBox{
+        position: absolute;
+        top: 40px;
+        right: 10px;
+        width: 50px;
+        opacity: 0;
+        white-space: nowrap;
+        .tip{
+            color: #f00;
+            font-size: 20px;
+            position: absolute;
+            right: 100%;
+            top: 0;
+            padding: 5px;
+            border-radius: 10px;
+            border: 1px solid #f00;
+            opacity: 0;
+            &.tipani{
+                @include transform-origin(100%);
+                @include animation(tipAni 3s ease-in-out);
+            }
+
+        }
+        img{
+            width: 100%;
+        }
+        .close{
+            position: relative;
+        }
+        .open{
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
+        &.openTrash{
+            @include scale(1.2);
+            opacity: 0.8;
+            .close{
+                opacity: 0;
+            }
+            .open{
+                opacity: 1;
+            }
+        }
+    }
+    .text{
+        position: relative;
+        width: 220px;
+        cursor: pointer;
+        margin-top: 10px;
+        text-align: left;
+        p{
+            -webkit-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+            @include user-select(none);
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+            padding: 5px;
+        }
+        &:hover{
+            // @include scale(1.2);
+            .hoverbox{
+                .top,.bottom{
+                    width: 100%;
+                    // @include scaleX(1);
+                }
+                .left,.right{
+                    height: 100%;
+                    // @include scaleY(1);
+                }
+            }
+
+        }
+        &.float{
+            position: absolute;
+        }
+        .hoverbox{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            .top,.bottom{
+                @include transition(width 0.3s ease);
+            }
+            .left,.right{
+                @include transition(height 0.3s ease);
+            }
+            .top{
+                width: 0%;
+                height: 1px;
+                position: absolute;
+                top: 0;
+                left: 0;
+                background: #000;
+                // @include scaleX(0);
+            }
+            .left{
+                width: 1px;
+                height: 0%;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                background: #000;
+                // @include scaleY(0);
+            }
+            .bottom{
+                width: 0%;
+                height: 1px;
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                background: #000;
+                // @include scaleX(0);
+            }
+            .right{
+                width: 1px;
+                height: 0%;
+                position: absolute;
+                top: 0;
+                right: 0;
+                background: #000;
+                // @include scaleY(0);
+            }
+
+        }
+
+    }
+    .questionBox{
+        display: inline-block;
+        vertical-align: middle;
+    }
+    .answerBox{
+        width: 50%;
+        display: inline-block;
+    }
+    .bgBox{
+        width: 50%;
+        display: inline-block;
+
+        img{
+            width: 100%;
+        }
+    }
+}
+.question2{
+    .question{
+        margin-bottom: 20px;
+    }
+    .text{
+        display: block;
+        position: relative;
+        z-index: 9;
+        cursor: pointer;
+        width: auto;
+        p{
+            cursor: pointer;
+            padding: 0px;
+        }
+
+        .hoverbox{
+            cursor: pointer;
+        }
+        span{
+            font-size: 16px;
+            display: inline-block;
+            position: relative;
+            padding: 5px;
+        }
+    }
+    .message{
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        background: #000;
+        padding: 5px;
+        border-radius: 5px;
+        opacity: 0;
+        h1{
+            margin: 0;
+            color: #fff;
+        }
+    }
+    .answerBox{
+
+    }
+    .bridge{
+        width: 80%;
+        margin: 50px auto 0;
+        position: relative;
+        img{
+            width: 100%;
+        }
+        .bridge1{
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .bridgeh{
+            position: relative;
+            width: 100%;
+            opacity: 0;
+            visibility: hidden;
+        }
+        .bridge2{
+            position: absolute;
+            bottom: -120%;
+            left: 50%;
+            cursor: pointer;
+            -webkit-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+
+            @include transform(translateX(-50%) rotate(35deg) scale(0.3));
+
+        }
+    }
+}
+.question3{
+    .answerBox{
+        width: 100%;
+        position: relative;
+        &.ani{
+            .overlay{
+                display: block;
+            }
+            .cups{
+                .cupWrapper{
+                    &:nth-child(1){
+                        @include animation(rotateBall1 0.3s ease-in-out);
+                        @include animation-iteration-count(5);
+                        @include animation-delay(3s);
+                    }
+                    &:nth-child(2){
+                        @include animation(rotateBall2 0.3s ease-in-out);
+                        @include animation-iteration-count(5);
+                        @include animation-delay(3s);
+                    }
+                    &:nth-child(3){
+                        @include animation(rotateBall3 0.3s ease-in-out);
+                        @include animation-iteration-count(5);
+                        @include animation-delay(3s);
+                    }
+                    .cup{
+
+                        @include animation(openAni 2s ease-in);
+                    }
+                }
+            }
+
+        }
+
+        .message{
+            position: absolute;
+            top: 7%;
+            left: 28%;
+            background: #000;
+            padding: 5px;
+            border-radius: 5px;
+            opacity: 0;
+            h1{
+                margin: 0;
+                color: #fff;
+            }
+        }
+    }
+    .question{
+        margin-bottom: 20px;
+        line-height: 30px;
+    }
+    .text{
+        display: block;
+        position: relative;
+        z-index: 9;
+        cursor: pointer;
+        p{
+            cursor: pointer;
+
+            padding: 0px;
+        }
+        .hoverbox{
+            cursor: pointer;
+        }
+        span{
+            font-size: 16px;
+            display: inline-block;
+            position: relative;
+            padding: 5px;
+        }
+    }
+    .overlay{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 20;
+        display: none;
+    }
+    .cups{
+        margin-top: 100px;
+        text-align: center;
+        width: 100%;
+        @include perspective(1000);
+
+        .cupWrapper{
+            position: relative;
+            display: inline-block;
+            width: 32%;
+            margin-right: 1%;
+            -webkit-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+
+            .cup{
+                width: 100%;
+                z-index: 2;
+                position: relative;
+                cursor: pointer;
+                -webkit-user-drag: none;
+                -moz-user-drag: none;
+                -o-user-drag: none;
+                user-drag: none;
+
+                img{
+                    width: 100%;
+                    -webkit-user-drag: none;
+                    -moz-user-drag: none;
+                    -o-user-drag: none;
+                    user-drag: none;
+                }
+            }
+            .balls{
+                position: absolute;
+                bottom: 1%;
+                left: 50%;
+                @include translateX(-50%);
+                width: 50px;
+                border-radius: 50%;
+                z-index: 1;
+                .blueBall{
+                    display: block;
+                    width: 100%;
+                }
+                .redBall{
+                    display: none;
+                    width: 100%;
+                }
+                &.red{
+                    .blueBall{
+                        display: none;
+                    }
+                    .redBall{
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.blackframe{
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.8;
+    position: fixed;
+    z-index: 998;
+}
+.correctBox,.wrongBox{
+    background: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    @include translate(-50%,-50%);
+    padding: 50px;
+    z-index: 999;
+    h1{
+        font-size: 26px;
+        margin-bottom:0;
+        color: #f00;
+    }
+}
+.wrongFrameBox{
+    background: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    @include translate(-50%,-50%);
+    padding: 50px;
+    z-index: 999;
+    h1{
+        font-size: 26px;
+        margin-bottom: 10%;
+        color: #f00;
+    }
+    p{
+        font-size: 16px;
+        cursor: pointer;
+        position: relative;
+        z-index: 2;
+        padding: 5px;
+    }
+    .top{
+        width: 0%;
+        height: 1px;
+        background: #000;
+        position: absolute;
+        top: 0%;
+        right: -100%;
+        @include translate3d(0,0,0);
+        @include transition(width 0.3s ease,right 0.3s ease);
+    }
+    .left{
+        position: absolute;
+        width: 1px;
+        height: 0%;
+        background: #000;
+        position: absolute;
+        top: -100%;
+        left: 0%;
+        @include translate3d(0,0,0);
+        @include transition(height 0.3s ease,top 0.3s ease);
+    }
+    .bottom{
+        position: absolute;
+        bottom: 0%;
+        left: -100%;
+        width: 0%;
+        height: 1px;
+        background: #000;
+        @include translate3d(0,0,0);
+        @include transition(width 0.3s ease,left 0.3s ease);
+    }
+    .right{
+        position: absolute;
+        bottom: -100%;
+        top: auto;
+        right: 0%;
+        width: 1px;
+        height: 0%;
+        background: #000;
+        @include translate3d(0,0,0);
+        @include transition(height 0.3s ease,bottom 0.3s ease);
+    }
+    .blackBg{
+        height: 100%;
+        width: 100%;
+        background: #000;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        opacity: 0;
+        @include translate3d(0,0,0);
+        @include transition(opacity 0.3s ease);
+    }
+    .areyousure{
+
+    }
+    .textContainer{
+        position: relative;
+        display: inline-block;
+        margin-right: 30px;
+        @include user-select(none);
+        &:hover{
+            .top{
+                width: 100%;
+                right: 0%;
+            }
+            .left{
+                height: 100%;
+                top: 0%;
+            }
+            .right{
+                height: 100%;
+                bottom: 0%
+            }
+            .bottom{
+                width: 100%;
+                left: 0%;
+            }
+            .blackBg{
+                opacity: 1;
+            }
+            p{
+                color: #fff;
+            }
+        }
+    }
+    .sure{
+        h1{
+            margin: 0;
+            text-align: center;
+        }
+    }
+
+}
+.right{
+    top: 0;
+    left: 100%;
+}
+
+.endFrame{
+    // font-size: 26px;
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    opacity: 0;
+    @include translate(-50%,-50%);
+        white-space: nowrap;
+    .q1,.q2,.q3{
+        font-size: 26px;
+        margin-bottom: 20px;
+    }
+    h1{
+        display: inline-block;
+        font-size: 26px;
+        margin-left: 5px;
+    }
+    .judgeBox{
+        width: 20px;
+        display: inline-block;
+        img{
+            width: 100%;
+            display: block;
+        }
+    }
+    .cor{
+        .correct{
+            display: block;
+        }
+        .wrong{
+            display: none;
+        }
+    }
+    .wro{
+        .correct{
+            display: none;
+        }
+        .wrong{
+            display: block;
+        }
+    }
+}
+@include keyframes('openAni'){
+    0%{@include translateY(0%)}
+    15%{@include translateY(-50%)}
+    90%{@include translateY(-50%)}
+    100%{@include translateY(0%)}
+}
+@include keyframes('rotateBall1'){
+    0%{@include translate3d(0,0,0)}
+    25%{@include translate3d(100%,0,-150px)}
+    50%{@include translate3d(200%,0,0px)}
+    75%{@include translate3d(100%,0,150px)}
+    100%{@include translate3d(0,0,0)}
+};
+@include keyframes('rotateBall2'){
+    0%{@include translate3d(0,0,0)}
+    25%{@include translate3d(-50%,0,30px)}
+    50%{@include translate3d(0%,0,60px)}
+    75%{@include translate3d(50%,0,30px)}
+    100%{@include translate3d(0,0,0)}
+};
+@include keyframes('rotateBall3'){
+    0%{@include translate3d(0,0,0)}
+    25%{@include translate3d(-100%,0,-150px)}
+    50%{@include translate3d(-200%,0,0px)}
+    75%{@include translate3d(-100%,0,150px)}
+    100%{@include translate3d(0,0,0)}
+};
+
+@include keyframes('tipAni'){
+    30%{opacity: 1}
+    30%{@include scale(1.3)}
+    50%{@include scale(1)}
+    90%{@include scale(1)}
+    90%{opacity: 1}
+    100%{opacity:0}
+};
