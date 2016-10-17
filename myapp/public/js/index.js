@@ -20,17 +20,15 @@ $(function(){
     var trashNum = 0;
     var wrongAnswer = 0;
     var correctAnswer = 0;
-    var XmouseMove,YmouseMove,currentX,currentY,thisLeft,thisTop;
+    var XmouseMove,YmouseMove,currentX,currentY,thisLeft,thisTop;//for question1
     var recX,recY,recW,recH,winw,correct1W,correct1H,rangeArrX,rangeArrY,currentMouseX,currentMouseY;//for question1
-    var mouseMoveX,mouseMoveY,leftOffset,topOffset,$this,trashX,trashY,trashHeight,trashWidth,trashTimer;
+    var mouseMoveX,mouseMoveY,leftOffset,topOffset,$this,trashX,trashY,trashHeight,trashWidth,trashTimer;//for question2 and some can be the gobal
     var mouseMove_flag = false;
     var intrash_flag = false;
     var trashTime_flag = true;
-    var wrongMove_flag = false;
+    var onMove_flag = false;
     var ques2Move_flag = false;
-    var ques2MoveBridge_flag = false;
     var ques3cupMove_flag = false;
-    var ques3cupMoving_flag = false;
     var ques3Sucess_flag = false;
 
 
@@ -43,20 +41,20 @@ $(function(){
     };
 
     $.ajax({
-            url: './data',
-            type: 'get',
-            dataType: 'json',
-            success : function(data){
-                dataBase = data.questions;
-                questionBox.each(function(i,item){
-                    questionBox.eq(i).find('.question').html(dataBase[i].question);
-                    questionBox.eq(i).find('p').eq(0).html(dataBase[i].answer1);
-                    questionBox.eq(i).find('p').eq(1).html(dataBase[i].answer2);
-                    questionBox.eq(i).find('p').eq(2).html(dataBase[i].answer3);
-                });
+        url: './data',
+        type: 'get',
+        dataType: 'json',
+        success : function(data){
+            dataBase = data.questions;
+            questionBox.each(function(i,item){
+                questionBox.eq(i).find('.question').html(dataBase[i].question);
+                questionBox.eq(i).find('p').eq(0).html(dataBase[i].answer1);
+                questionBox.eq(i).find('p').eq(1).html(dataBase[i].answer2);
+                questionBox.eq(i).find('p').eq(2).html(dataBase[i].answer3);
+            });
 
-            }
-        });
+        }
+    });
 
     correct1.on('mousedown',function(e){ //question1's correct answer's click event
 
@@ -89,8 +87,8 @@ $(function(){
         topOffset = e.pageY - $(this).offset().top;
         $this = $(this);
 
-        trashX = trashBox.offset().left;
-        trashY = trashBox.offset().top;
+        // trashX = trashBox.offset().left;
+        // trashY = trashBox.offset().top;
         trashHeight = trashBox.height();
         trashWidth = trashBox.width();
 
@@ -122,9 +120,9 @@ $(function(){
 
     $(window).on('mousemove',function(e){
         //question1's drag event
-        if(mouseMove_flag){
-            wrongMove_flag = true;
-            if(wrongMove_flag){
+        if(mouseMove_flag){//trigger from the mousedown event
+            onMove_flag = true;
+            // if(wrongMove_flag){ //only move will trigger this event(not click)
                 $this.addClass('float');
                 mouseMoveX = e.pageX - leftOffset;
                 mouseMoveY = e.pageY - topOffset;
@@ -149,13 +147,13 @@ $(function(){
                         trashBox.removeClass('openTrash');
                         intrash_flag = false;
                 }
-            }
+            // }
 
         }
 
         //question2's drag event
         if(ques2Move_flag){
-            ques2MoveBridge_flag = true;
+            onMove_flag = true;
 
             leftOffset = e.pageX - currentX;
             topOffset = e.pageY - currentY;
@@ -174,7 +172,7 @@ $(function(){
 
         //question3's cup drag
         if(ques3cupMove_flag){
-            ques3cupMoving_flag =true;
+            onMove_flag =true;
             topOffset = e.pageY - currentY;
             if(topOffset >= 0){
                 topOffset = 0;
@@ -195,8 +193,8 @@ $(function(){
     $(window).on('mouseup',function(e){
         //question1
         if(mouseMove_flag){
-            if(wrongMove_flag){
-                if(intrash_flag){
+            if(onMove_flag){//only move will trigger this event(not click)
+                if(intrash_flag){//in trashBox
                     TweenMax.to($this,0.2,{
                         top:trashY,
                         left:trashX,
@@ -215,7 +213,7 @@ $(function(){
                     $this.removeClass('float').attr('style','');
                 }
                 trashBox.removeClass('openTrash');
-                wrongMove_flag = false;
+                onMove_flag = false;
             }else{//wrong window
                 $('.blackframe,.q1wrong').removeClass('disnone');
             }
@@ -224,7 +222,7 @@ $(function(){
 
         //question2
         if(ques2Move_flag){
-            if(ques2MoveBridge_flag){
+            if(onMove_flag){//only move will trigger this event(not click)
                 if(parseInt(mouseMoveY) <= $('.bridge').height()/2){
                     TweenMax.set($this,{top:0,left:'50%',bottom:'auto',onComplete:function(){
                         successM_flag = true;
@@ -236,17 +234,17 @@ $(function(){
                     TweenMax.set($this,{top:'auto',left:'50%',bottom:'-120%'});
 
                 }
-                ques2MoveBridge_flag= false;
+                onMove_flag= false;
             }
             ques2Move_flag = false;
         }
 
         //question3
         if(ques3cupMove_flag){
-            if(ques3cupMoving_flag){
+            if(onMove_flag){//only move will trigger this event(not click)
                 TweenMax.to($this,0.3,{y:0});
                 ques3cupMove_flag = false;
-                ques3cupMoving_flag = false;
+                onMove_flag = false;
                 if(ques3Sucess_flag){
                     alldone();
                 }
@@ -306,18 +304,20 @@ $(function(){
             });
             successR_flag = true;
     });
+
     $('.scaleBtn').on('click',function(){
-            TweenMax.to(bridgeIcon,0.5,{
-                scale:1,
-                ease:Back.easeOut,
-                onComplete:function(){
-                    if(successR_flag && successS_flag && successM_flag){
-                        secondSuccess(correctAnswer);
-                    }
+        TweenMax.to(bridgeIcon,0.5,{
+            scale:1,
+            ease:Back.easeOut,
+            onComplete:function(){
+                if(successR_flag && successS_flag && successM_flag){
+                    secondSuccess(correctAnswer);
                 }
-            });
-            successS_flag = true;
+            }
+        });
+        successS_flag = true;
     });
+
     $('.moveBtn').on('click',function(){//the random message
         clearTimeout(textTimer);
         message.removeClass('disnone');
@@ -366,14 +366,7 @@ $(function(){
                         delay:0.5,
                         onComplete:function(){
                             $('.cup').attr('style','');
-                            // $('.answerBox').addClass('ani');
-                            //
-                            // cupMove_flag = true;
                             $('.q3wrong,.blackframe').removeClass('disnone');
-                            // setTimeout(function(){
-                            //     $('.q3wrong,.blackframe').addClass('disnone');
-                            //     $('.answerBox').removeClass('ani');
-                            // },5000);
                         }
                     });
             }});
@@ -418,12 +411,12 @@ $(function(){
     function mouseCurrentPositionX(MouseX,MouseY,rangeArrX){ //将随机取得的X,Y赋给correct1
         recW = $('.question1 .questionBox').width();
         recH = $('.question1 .questionBox').height();
-        correct1W = parseInt($('.correct1').width());
-        correct1H = parseInt($('.correct1').height());
+        correct1W = parseInt(correct1.width());
+        correct1H = parseInt(correct1.height());
         MouseX = getRadom(MouseX,rangeArrX,leftOffset);
         MouseY = getRadom(MouseY,rangeArrY,topOffset);
 
-        TweenMax.to('.correct1',0.3,{left:MouseX,top:MouseY});
+        TweenMax.to(correct1,0.3,{left:MouseX,top:MouseY});
     }
     function getRadom(MousePosition,rangeArray,ranges){ //从下面的取值范围中随机取值
 
@@ -445,7 +438,7 @@ $(function(){
         recW = $('.question1 .questionBox').width();
         winw = $(window).width();
         winh = $(window).height();
-        correct1W = $('.correct1').width();
+        correct1W = correct1.width();
         var rangeArr = [];
         for(i=0;i <= winw - correct1W -80;++i){
             if(i+correct1W < recX || i > recX + recW){
@@ -459,7 +452,7 @@ $(function(){
         recH = $('.question1 .questionBox').height();
         winw = $(window).width();
         winh = $(window).height();
-        correct1H = $('.correct1').height();
+        correct1H = correct1.height();
         var rangeArr2 = [];
         for(i=0;i<=winh - correct1H;++i){
             if(i+correct1H < recY || i > recY + recH){
@@ -499,10 +492,12 @@ $(function(){
     //to the question2
     function toQuestion2(){
         var delayTime = 0.3;
+        var q1text = $('.question1 .answerBox .text');
+        var q2text = $('.question2 .answerBox .text');
         TweenMax.to('.question1 .question',0.5,{marginLeft:'-1000000px',ease:Cubic.easeIn});
-        TweenMax.to($('.question1 .answerBox .text').eq(0),0.5,{x:'-10000px',ease:Cubic.easeIn,delay:0.2});
-        TweenMax.to($('.question1 .answerBox .text').eq(1),0.5,{x:'-10000px',ease:Cubic.easeIn,delay:0.1});
-        TweenMax.to($('.question1 .answerBox .text').eq(2),0.5,{x:'-10000px',ease:Cubic.easeIn,
+        TweenMax.to(q1text.eq(0),0.5,{x:'-10000px',ease:Cubic.easeIn,delay:0.2});
+        TweenMax.to(q1text.eq(1),0.5,{x:'-10000px',ease:Cubic.easeIn,delay:0.1});
+        TweenMax.to(q1text.eq(2),0.5,{x:'-10000px',ease:Cubic.easeIn,
             delay:0.1,
             onComplete:function(){
                 $('.question1').addClass('right');
@@ -520,9 +515,9 @@ $(function(){
         //questin2 get in
         TweenMax.fromTo('.question2 .question',0.5,{x:1000},{x:0,ease:Back.easeIn,delay:delayTime});
         TweenMax.fromTo('.question2 .bridge',0.5,{x:1000},{x:0,ease:Back.easeIn,delay:delayTime + 0.1});
-        TweenMax.fromTo($('.question2 .answerBox .text').eq(0),0.5,{x:1000},{x:0,ease:Back.easeIn,delay:delayTime + 0.3});
-        TweenMax.fromTo($('.question2 .answerBox .text').eq(1),0.5,{x:1000},{x:0,ease:Back.easeIn,delay:delayTime + 0.4});
-        TweenMax.fromTo($('.question2 .answerBox .text').eq(2),0.5,{x:1000},{x:0,ease:Back.easeIn,delay:delayTime + 0.5,onComplete:function(){
+        TweenMax.fromTo(q2text.eq(0),0.5,{x:1000},{x:0,ease:Back.easeIn,delay:delayTime + 0.3});
+        TweenMax.fromTo(q2text.eq(1),0.5,{x:1000},{x:0,ease:Back.easeIn,delay:delayTime + 0.4});
+        TweenMax.fromTo(q2text.eq(2),0.5,{x:1000},{x:0,ease:Back.easeIn,delay:delayTime + 0.5,onComplete:function(){
             TweenMax.to('.bridge2',0.5,{scale:0.8,yoyo:true,repeat:1,ease:Cubic.easeOut,delay:0.5,onComplete:function(){
                 $('.bridge2,.question2 .answerBox .text,.question2 .question,.question2 .bridge').attr('style','');
             }});
